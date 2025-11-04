@@ -1,6 +1,6 @@
 {
   "name": "moview",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Desktop guardian that switches you back to work when someone walks in while you are gaming.",
   "main": "dist/main/index.js",
   "author": "AGUAI Tech",
@@ -83,7 +83,7 @@
     "mac": {
       "target": [
         {
-          "target": "dmg",
+          "target": "zip",
           "arch": [
             "x64",
             "arm64"
@@ -94,7 +94,7 @@
       "artifactName": "${productName}-${version}-${arch}.${ext}"
     },
     "dmg": {
-      "format": "ULFO"
+      "format": "UDZO"
     }
   }
 }

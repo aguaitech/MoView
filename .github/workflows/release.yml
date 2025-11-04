@@ -1,0 +1,104 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - '*-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'
+
+jobs:
+  build-mac:
+    name: Build macOS DMG
+    runs-on: macos-latest
+    env:
+      YARN_CACHE_FOLDER: ~/.yarn-cache
+      APPLE_DMG_DISABLE_APFS: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build dmg packages
+        run: yarn dist:mac
+
+      - name: Upload mac artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-artifacts
+          path: release/*.{dmg,zip}
+          if-no-files-found: error
+
+  build-win:
+    name: Build Windows Installer
+    runs-on: windows-latest
+    env:
+      YARN_CACHE_FOLDER: ~/.yarn-cache
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+        shell: pwsh
+
+      - name: Build nsis installer
+        run: yarn dist:win
+        shell: pwsh
+
+      - name: Upload win artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-artifacts
+          path: release/*.{exe,zip}
+          if-no-files-found: error
+
+  publish:
+    name: Publish Release
+    runs-on: ubuntu-latest
+    needs:
+      - build-mac
+      - build-win
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Gather files
+        id: gather
+        run: |
+          ls -R artifacts
+          echo "files=$(find artifacts -type f -print0 | tr '\0' '\n')" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: MoView ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: |
+            artifacts/mac-artifacts/*
+            artifacts/win-artifacts/*
