@@ -26,6 +26,8 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build dmg packages
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn dist:mac
 
       - name: Upload mac artifacts
@@ -55,6 +57,8 @@ jobs:
         shell: pwsh
 
       - name: Build nsis installer
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: yarn dist:win
         shell: pwsh
 
