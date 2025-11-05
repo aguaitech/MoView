@@ -12,6 +12,7 @@ jobs:
     env:
       YARN_CACHE_FOLDER: ~/.yarn-cache
       APPLE_DMG_DISABLE_APFS: '1'
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,8 +27,6 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build dmg packages
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: yarn dist:mac
 
       - name: Upload mac artifacts
@@ -42,6 +41,7 @@ jobs:
     runs-on: windows-latest
     env:
       YARN_CACHE_FOLDER: ~/.yarn-cache
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -57,8 +57,6 @@ jobs:
         shell: pwsh
 
       - name: Build nsis installer
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: yarn dist:win
         shell: pwsh
 
