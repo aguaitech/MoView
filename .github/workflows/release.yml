@@ -33,7 +33,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: mac-artifacts
-          path: release/*.{dmg,zip}
+          path: |
+            release/*.dmg
+            release/*.zip
           if-no-files-found: error
 
   build-win:
@@ -64,7 +66,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: win-artifacts
-          path: release/*.{exe,zip}
+          path: |
+            release/*.exe
+            release/*.zip
           if-no-files-found: error
 
   publish:
