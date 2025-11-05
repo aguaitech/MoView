@@ -27,7 +27,7 @@ jobs:
 
       - name: Build dmg packages
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: yarn dist:mac
 
       - name: Upload mac artifacts
@@ -58,7 +58,7 @@ jobs:
 
       - name: Build nsis installer
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: yarn dist:win
         shell: pwsh
 
@@ -90,7 +90,7 @@ jobs:
       - name: Create Release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ github.ref_name }}
           release_name: MoView ${{ github.ref_name }}
@@ -100,7 +100,7 @@ jobs:
       - name: Upload Release Assets
         uses: softprops/action-gh-release@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           tag_name: ${{ github.ref_name }}
           files: |
