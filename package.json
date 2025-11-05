@@ -18,9 +18,9 @@
     "typecheck": "tsc -p tsconfig.main.json && tsc -p tsconfig.preload.json && tsc -p tsconfig.renderer.json",
     "test": "run-s build:main test:run",
     "test:run": "node --test tests/settingsUtils.test.js",
-    "dist": "rm -rf release && npm run build && electron-builder -mw",
-    "dist:mac": "rm -rf release && npm run build && APPLE_DMG_DISABLE_APFS=1 electron-builder --mac",
-    "dist:win": "rm -rf release && npm run build && electron-builder --win"
+    "dist": "rm -rf release && npm run build && electron-builder -mw --publish=never",
+    "dist:mac": "rm -rf release && npm run build && APPLE_DMG_DISABLE_APFS=1 electron-builder --mac --publish=never",
+    "dist:win": "rm -rf release && npm run build && electron-builder --win --publish=never"
   },
   "dependencies": {
     "@vladmandic/human": "^3.3.6",
