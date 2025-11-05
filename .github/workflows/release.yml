@@ -83,12 +83,6 @@ jobs:
         with:
           path: artifacts
 
-      - name: Gather files
-        id: gather
-        run: |
-          ls -R artifacts
-          echo "files=$(find artifacts -type f -print0 | tr '\0' '\n')" >> $GITHUB_OUTPUT
-
       - name: Create Release
         uses: actions/create-release@v1
         env:
